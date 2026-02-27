@@ -1,251 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A-RAIA ENGENHARIA ARQUITETURA & CONSTRUÇÃO</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARAIA | Engenharia, Arquitectura e Construção</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --main-color: #000000; --text-light: #666; --bg-color: #ffffff; --accent: #888; --font-main: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: var(--font-main); background-color: var(--bg-color); color: var(--main-color); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-<style>
+        /* Navegación Principal */
+        nav { position: fixed; width: 100%; padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); border-bottom: 1px solid #eee; }
+        
+        /* Contenedor del Logo (Izquierda) */
+        .logo-container { display: flex; align-items: center; text-decoration: none; color: inherit; }
+        .logo-svg { width: 120px; height: auto; } /* Ajusta el tamaño del logo aquí */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-scroll-behavior:smooth;
-}
+        /* Enlaces de Navegación (Derecha) */
+        .nav-right { display: flex; gap: 30px; align-items: center; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { text-decoration: none; color: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; opacity: 0.7; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; }
+        
+        /* Selector de Idioma Corregido */
+        .lang-selector { border-left: 1px solid #ddd; padding-left: 20px; display: flex; gap: 10px; }
+        .lang-selector a { text-decoration: none; color: var(--accent); font-size: 0.7rem; font-weight: 700; transition: 0.3s; }
+        .lang-selector a:hover, .lang-selector a.active { color: var(--main-color); }
 
-body{
-background:#fff;
-color:#111;
-}
+        /* Botón Home Flotante */
+        #backToTop { position: fixed; bottom: 30px; right: 30px; background: var(--main-color); color: white; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none; font-size: 1rem; z-index: 999; opacity: 0; transition: 0.5s; visibility: hidden; border: none; cursor: pointer; }
+        #backToTop.show { opacity: 1; visibility: visible; }
 
-header{
-position:fixed;
-top:0;
-width:100%;
-padding:20px 8%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(255,255,255,0.9);
-backdrop-filter:blur(10px);
-z-index:1000;
-}
+        /* Secciones */
+        .section-hero { height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; color: white; text-align: center; background: #000; padding-top: 80px; }
+        .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; z-index: 0; filter: grayscale(1); }
+        .content-overlay { z-index: 1; max-width: 800px; padding: 0 20px; }
+        .content-overlay h1 { font-size: clamp(2.5rem, 8vw, 5rem); letter-spacing: 12px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; }
+        .content-overlay p { text-transform: uppercase; letter-spacing: 4px; font-weight: 300; font-size: 0.9rem; opacity: 0.9; }
 
-.logo{
-.logo img{
-height:45px;
-cursor:pointer;
-}
+        .section-padding { padding: 120px 60px; position: relative; }
+        .section-title { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 60px; color: var(--accent); font-weight: 700; }
 
-nav{
-display:flex;
-align-items:center;
-gap:25px;
-font-size:14px;
-}
+        /* Grid de Proyectos */
+        .filter-menu { margin-bottom: 40px; display: flex; gap: 25px; overflow-x: auto; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .filter-btn { cursor: pointer; border: none; background: none; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); white-space: nowrap; font-weight: 600; transition: 0.3s; }
+        .filter-btn:hover, .filter-btn.active { color: black; }
 
-nav a{
-text-decoration:none;
-color:#111;
-font-weight:500;
-}
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 30px; }
+        .project-card { position: relative; aspect-ratio: 16/10; background: #f5f5f5; overflow: hidden; cursor: pointer; }
+        .project-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 1s cubic-bezier(0.2, 1, 0.3, 1); }
+        .project-card:hover img { filter: grayscale(0); transform: scale(1.03); }
 
-.lang a{
-font-size:12px;
-margin-left:8px;
-}
+        /* Sección Equipo */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 60px; }
+        .team-member { text-align: left; }
+        .team-img { width: 100%; aspect-ratio: 1/1; background: #eee; margin-bottom: 25px; object-fit: cover; filter: grayscale(1); transition: 0.5s; }
+        .team-member:hover .team-img { filter: grayscale(0); }
+        .team-member h4 { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+        .team-member p { font-size: 0.85rem; color: var(--text-light); font-weight: 300; line-height: 1.6; }
 
-.home-button{
-position:fixed;
-bottom:30px;
-right:30px;
-background:#111;
-color:white;
-padding:12px 18px;
-font-size:12px;
-cursor:pointer;
-border-radius:4px;
-text-decoration:none;
-z-index:1000;
-}
+        footer { padding: 100px 60px; background: #f9f9f9; border-top: 1px solid #eee; }
+        .footer-content { max-width: 600px; }
+        .footer-content h2 { font-size: 1.8rem; margin-bottom: 25px; font-weight: 400; letter-spacing: -1px; }
+        .footer-contact { font-size: 0.9rem; color: var(--main-color); text-decoration: none; display: block; margin-bottom: 10px; font-weight: 600; }
 
-.hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-padding:0 8%;
-color:white;
-background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),
-url('https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1800&q=80');
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-}
-
-.hero h1{
-font-size:58px;
-max-width:900px;
-line-height:1.1;
-}
-
-.hero p{
-margin-top:30px;
-font-size:20px;
-max-width:700px;
-color:#e0e0e0;
-}
-
-.section{
-padding:120px 8%;
-}
-
-.section-title{
-font-size:36px;
-margin-bottom:50px;
-}
-
-.categories{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:40px;
-}
-
-.category h3{
-margin-bottom:15px;
-}
-
-.team{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:40px;
-}
-
-.member img{
-width:100%;
-height:300px;
-object-fit:cover;
-}
-
-.member h4{
-margin-top:15px;
-}
-
-.member p{
-font-size:14px;
-color:#555;
-margin-top:8px;
-}
-
-.contact{
-background:#111;
-color:white;
-padding:120px 8%;
-}
-
-footer{
-padding:40px 8%;
-font-size:12px;
-color:#777;
-}
-
-@media(max-width:768px){
-.hero h1{
-font-size:38px;
-}
-}
-
-</style>
+        @media (max-width: 1024px) {
+            nav { padding: 20px 30px; }
+            .nav-links { display: none; } /* Ocultar links en tablet/móvil por simplicidad */
+            .section-padding { padding: 80px 30px; }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-<div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    <img src="logo-araia.png" alt="ARAIA Logo">
-</div>
+    <button id="backToTop" title="Voltar ao topo">↑</button>
 
-<nav>
-<a href="#projects">Projetos</a>
-<a href="#team">Equipa</a>
-<a href="#contact">Contacto</a>
+    <nav>
+        <a href="#home" class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10,40 C60,35 90,45 140,40 C190,35 220,45 290,40" stroke="black" stroke-width="1.5" fill="none"/>
+                <text x="150" y="65" font-family="'Inter', sans-serif" font-size="22" font-weight="700" letter-spacing="10" text-anchor="middle" fill="black">ARAIA</text>
+            </svg>
+        </a>
+        
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="#projetos">Projetos</a>
+                <a href="#equipa">Equipa</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+            <div class="lang-selector">
+                <a href="#" class="active">PT</a>
+                <a href="es/index.html">ES</a>
+                <a href="en/index.html">EN</a>
+            </div>
+        </div>
+    </nav>
 
-<div class="lang">
-<a href="index.html">PT</a> |
-<a href="es.html">ES</a> |
-<a href="en.html">EN</a>
-</div>
-</nav>
-</header>
+    <section id="home" class="section-hero">
+        <img class="bg-image" src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1600&q=80" alt="ARAIA Architecture">
+        <div class="content-overlay">
+            <h1>ARAIA</h1>
+            <p>Engenharia | Arquitectura | Construção</p>
+        </div>
+    </section>
 
-<section class="hero">
-<h1>Engenharia, Arquitetura e Gestão de Construção.</h1>
-<p>
-Projetos de especialidades, projeto arquitetónico, fiscalização e gestão de construção com rigor técnico e visão contemporânea.
-</p>
-</section>
+    <section id="projetos" class="section-padding">
+        <h2 class="section-title">Portefólio Seleccionado</h2>
+        <div class="filter-menu">
+            <button class="filter-btn active">Todos</button>
+            <button class="filter-btn">Especialidades</button>
+            <button class="filter-btn">Arquitectura</button>
+            <button class="filter-btn">Fiscalização</button>
+            <button class="filter-btn">Gestão de Construção</button>
+        </div>
+        <div class="project-grid">
+            <div class="project-card"><img src="https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?auto=format&fit=crop&w=800&q=80"></div>
+            <div class="project-card"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80"></div>
+            <div class="project-card"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80"></div>
+        </div>
+    </section>
 
-<section id="projects" class="section">
-<h2 class="section-title">Projetos</h2>
+    <section id="equipa" class="section-padding" style="background: #111; color: white;">
+        <h2 class="section-title" style="color: #666;">A Equipa</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img class="team-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80" alt="Director Técnico">
+                <h4>Nome Sobrenome</h4>
+                <p>Engenheiro Civil / Director Técnico. Especialista em estruturas e gestão de projectos com 10 anos de experiência.</p>
+            </div>
+            <div class="team-member">
+                <img class="team-img" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=500&q=80" alt="Arquitecta Sénior">
+                <h4>Nome Sobrenome</h4>
+                <p>Arquitecta Sénior. Focada em design contemporâneo e integração sustentável no ambiente urbano.</p>
+            </div>
+        </div>
+    </section>
 
-<div class="categories">
+    <footer id="contacto">
+        <div class="footer-content">
+            <h2>Vamos construir o futuro juntos.</h2>
+            <a href="mailto:geral@araia.pt" class="footer-contact">geral@araia.pt</a>
+            <p style="color: var(--text-light); font-size: 0.9rem;">Porto, Portugal</p>
+        </div>
+        <p style="margin-top: 60px; font-size: 0.65rem; color: #aaa; letter-spacing: 1px;">© 2024 ARAIA ENGENHARIA ARQUITECTURA E CONSTRUÇÃO</p>
+    </footer>
 
-<div class="category">
-<h3>Projetos de Especialidades</h3>
-<p>Estruturas, térmica, acústica, redes prediais e coordenação técnica.</p>
-</div>
+    <script>
+        // Botão voltar ao topo
+        const backToTopBtn = document.getElementById("backToTop");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                backToTopBtn.classList.add("show");
+            } else {
+                backToTopBtn.classList.remove("show");
+            }
+        };
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo(0, 0);
+        });
 
-<div class="category">
-<h3>Projeto Arquitetónico</h3>
-<p>Conceção, licenciamento e desenvolvimento de projetos residenciais e comerciais.</p>
-</div>
-
-<div class="category">
-<h3>Fiscalização</h3>
-<p>Acompanhamento técnico, controlo de qualidade e conformidade normativa.</p>
-</div>
-
-<div class="category">
-<h3>Gestão de Construção</h3>
-<p>Planeamento, coordenação e gestão integral de empreendimentos.</p>
-</div>
-
-</div>
-</section>
-
-<section id="team" class="section">
-<h2 class="section-title">Equipa</h2>
-
-<div class="team">
-
-<div class="member">
-<img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=800&q=80">
-<h4>Nome Apelido</h4>
-<p>Engenheiro Civil – Especialista em estruturas e coordenação de projetos.</p>
-</div>
-
-<div class="member">
-<img src="https://images.unsplash.com/photo-1603415526960-f8f0f8a37f3d?auto=format&fit=crop&w=800&q=80">
-<h4>Nome Apelido</h4>
-<p>Arquiteto – Desenvolvimento conceptual e execução de projeto.</p>
-</div>
-
-</div>
-</section>
-
-<section id="contact" class="contact">
-<h2>Contacto</h2>
-<p>Email: geral@araia.pt</p>
-<p>Portugal</p>
-</section>
-
-<a href="#" class="home-button">Início ↑</a>
-
-<footer>
-© 2026 ARAIA ENGENHARIA ARQUITETURA E CONSTRUÇÃO
-</footer>
-
+        // Lógica de filtrado visual
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
