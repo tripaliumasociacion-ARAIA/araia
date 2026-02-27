@@ -1,1 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARAIA | Engenharia, Arquitectura e Construção</title>
+    <meta name="description" content="ARAIA - Engenharia, Arquitectura e Construção em Portugal.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #2d2d2d;
+            --accent: #5a6c57;
+            --light: #fafafa;
+            --gray: #888888;
+            --white: #ffffff;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--primary);
+            background: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ==================== NAVIGATION ==================== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        nav.scrolled {
+            padding: 0.8rem 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        /* LOGO STYLES */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        .logo-svg {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            border-left: 1px solid rgba(0,0,0,0.1);
+            padding-left: 2rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .lang-btn:hover { color: var(--primary); }
+        
+        .lang-btn.active {
+            color: var(--primary);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .mobile-menu { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+        .mobile-menu span { width: 25px; height: 2px; background: var(--primary); }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            margin-top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-slider {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .hero-slide.active { opacity: 1; }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(26,26,26,0.85) 0%, rgba(26,26,26,0.6) 50%, rgba(26,26,26,0.7) 100%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+            color: var(--white);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 650px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 3rem; left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.8rem;
+            z-index: 2;
+        }
+
+        .slider-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider-dot.active {
+            background: var(--white);
+            transform: scale(1.2);
+        }
+
+        /* ==================== SECTIONS GENERAL ==================== */
+        .stats {
+            padding: 5rem 5%;
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p { font-size: 0.9rem; opacity: 0.8; font-weight: 300; }
+
+        .services { padding: 6rem 5%; background: var(--light); }
+        
+        .section-header { max-width: 800px; margin-bottom: 3rem; }
+        
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .service-icon {
+            width: 45px; height: 45px;
+            background: var(--accent);
+            opacity: 0.1;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            border-radius: 8px;
+        }
+
+        .service-card h3 { font-size: 1.15rem; margin-bottom: 0.75rem; font-weight: 600; }
+        .service-card p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; }
+
+        /* ==================== PROJECTS ==================== */
+        .projects { padding: 6rem 5%; background: var(--white); }
+        .projects-header { text-align: center; margin-bottom: 3rem; }
+        .projects-header h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+        .projects-header p { color: var(--gray); max-width: 600px; margin: 0 auto; }
+
+        .project-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .project-tab {
+            padding: 0.8rem 1.8rem;
+            background: var(--light);
+            border: 2px solid transparent;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 50px;
+        }
+
+        .project-tab:hover { border-color: var(--accent); }
+        .project-tab.active { background: var(--primary); color: var(--white); }
+
+        .project-category { display: none; }
+        .project-category.active {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .project-card img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .project-card:hover img { transform: scale(1.08); }
+
+        .project-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            color: var(--white);
+        }
+
+        .project-overlay h3 { font-size: 1.2rem; margin-bottom: 0.3rem; font-weight: 600; }
+        .project-overlay p { font-size: 0.85rem; opacity: 0.9; }
+
+        .project-placeholder {
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: var(--gray);
+            font-size: 0.85rem;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .project-placeholder-icon { font-size: 2.5rem; opacity: 0.3; }
+
+        /* ==================== ABOUT & CONTACT ==================== */
+        .about { padding: 6rem 5%; background: var(--light); }
+        .about-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); margin-bottom: 1.5rem; font-weight: 700; line-height: 1.3; }
+        .about-text p { color: var(--gray); margin-bottom: 1.25rem; font-size: 1rem; line-height: 1.7; }
+        
+        .about-image {
+            position: relative;
+            aspect-ratio: 1;
+            background: var(--primary);
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .about-image-placeholder {
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .contact { padding: 6rem 5%; background: var(--white); }
+        .contact-content { max-width: 800px; margin: 0 auto; text-align: center; }
+        .contact h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; font-weight: 700; }
+        .contact > .contact-content > p { color: var(--gray); font-size: 1.05rem; margin-bottom: 2.5rem; }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .contact-item h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-item p { color: var(--primary); font-size: 1rem; line-height: 1.6; }
+        .contact-item a { color: var(--primary); text-decoration: none; transition: var(--transition); }
+        .contact-item a:hover { color: var(--accent); }
+
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 2.5rem 5%;
+            text-align: center;
+        }
+        footer p { opacity: 0.7; font-size: 0.85rem; }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .nav-links, .language-selector { display: none; }
+            .mobile-menu { display: flex; }
+            .hero h1 { font-size: 2.2rem; }
+            .about-content { grid-template-columns: 1fr; gap: 2.5rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; text-align: center; }
+            .contact-grid { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <!-- LOGO ARAIA (SVG Integrado) -->
+        <a href="#inicio" class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Forma estilizada que evoca la península / estructura -->
+                <path d="M20 85 L20 20 L50 15 L80 20 L80 85 L50 95 Z" stroke="#1a1a1a" stroke-width="4" fill="none"/>
+                <!-- Línea interior que sugiere frontera / estructura -->
+                <path d="M50 15 L50 95" stroke="#5a6c57" stroke-width="3"/>
+                <!-- Detalle arquitectónico -->
+                <circle cx="50" cy="50" r="8" fill="#5a6c57"/>
+            </svg>
+            <span class="logo-text">ARAIA</span>
+        </a>
+        
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#inicio" data-lang="nav_home">Início</a></li>
+                <li><a href="#servicos" data-lang="nav_services">Serviços</a></li>
+                <li><a href="#projetos" data-lang="nav_projects">Projetos</a></li>
+                <li><a href="#sobre" data-lang="nav_about">Sobre</a></li>
+                <li><a href="#contacto" data-lang="nav_contact">Contacto</a></li>
+            </ul>
+
+            <!-- Language Selector (CORREGIDO) -->
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="changeLanguage('pt', this)">PT</button>
+                <button class="lang-btn" onclick="changeLanguage('es', this)">ES</button>
+                <button class="lang-btn" onclick="changeLanguage('en', this)">EN</button>
+            </div>
+
+            <div class="mobile-menu">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+        </div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <span class="hero-label" data-lang="hero_label">Engenharia • Arquitectura • Construção</span>
+            <h1 data-lang="hero_title">Soluções integradas para o seu projeto</h1>
+            <p data-lang="hero_text">Desenvolvemos projetos de especialidades, projetos de arquitectura, fiscalização de obra e gestão de construção. Do conceito à entrega, com rigor e excelência.</p>
+            <div class="hero-buttons">
+                <a href="#projetos" class="btn btn-primary" data-lang="hero_btn1">Ver Projetos</a>
+                <a href="#contacto" class="btn btn-secondary" data-lang="hero_btn2">Fale Connosco</a>
+            </div>
+        </div>
+
+        <div class="slider-dots">
+            <div class="slider-dot active" onclick="goToSlide(0)"></div>
+            <div class="slider-dot" onclick="goToSlide(1)"></div>
+            <div class="slider-dot" onclick="goToSlide(2)"></div>
+            <div class="slider-dot" onclick="goToSlide(3)"></div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item"><h3>+50</h3><p data-lang="stat_1">Projetos Concluídos</p></div>
+            <div class="stat-item"><h3>+30</h3><p data-lang="stat_2">Clientes Satisfeitos</p></div>
+            <div class="stat-item"><h3>100%</h3><p data-lang="stat_3">Compromisso Qualidade</p></div>
+            <div class="stat-item"><h3>15+</h3><p data-lang="stat_4">Parceiros Especializados</p></div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="servicos">
+        <div class="section-header fade-in">
+            <span class="section-label" data-lang="services_label">O Que Fazemos</span>
+            <h2 data-lang="services_title">Soluções completas para a sua obra</h2>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <div class="service-icon">🏗️</div>
+                <h3 data-lang="service_1_title">Projetos de Especialidades</h3>
+                <p data-lang="service_1_text">Estruturas, águas, saneamento, eletricidade, telecomunicações e segurança contra incêndios.</p>
+            </div>
+            
+            <div class="service-card fade-in">
+                <div class="service-icon">🏛️</div>
+                <h3 data-lang="service_2_title">Projetos de Arquitectura</h3>
+                <p data-lang="service_2_text">Estudos prévios, anteprojetos e projetos de execução com design contemporâneo e funcional.</p>
+            </div>
+            
+            <div class="service-card fade-in">
+                <div class="service-icon">📋</div>
+                <h3 data-lang="service_3_title">Fiscalização de Obra</h3>
+                <p data-lang="service_3_text">Acompanhamento técnico rigoroso, controlo de qualidade, prazos e conformidade normativa.</p>
+            </div>
+            
+            <div class="service-card fade-in">
+                <div class="service-icon">⚙️</div>
+                <h3 data-lang="service_4_title">Gestão de Construção</h3>
+                <p data-lang="service_4_text">Coordenação geral da obra, gestão de equipas, orçamento e planeamento de execução.</p>
+            </div>
+            
+            <div class="service-card fade-in">
+                <div class="service-icon">🔍</div>
+                <h3 data-lang="service_5_title">Peritagens Técnicas</h3>
+                <p data-lang="service_5_text">Avaliações técnicas, peritagens de garantia e engenharia forense com relatórios fundamentados.</p>
+            </div>
+            
+            <div class="service-card fade-in">
+                <div class="service-icon">🌱</div>
+                <h3 data-lang="service_6_title">Sustentabilidade</h3>
+                <p data-lang="service_6_text">Eficiência energética, materiais eco-friendly e certificação energética de edifícios.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projetos">
+        <div class="projects-header fade-in">
+            <span class="section-label" data-lang="projects_label">Portfólio</span>
+            <h2 data-lang="projects_title">Os Nossos Projetos</h2>
+            <p data-lang="projects_text">Explore os nossos trabalhos divididos por área de especialização.</p>
+        </div>
+
+        <div class="project-tabs">
+            <div class="project-tab active" onclick="filterProjects('especialidades', this)" data-lang="tab_especialidades">Especialidades</div>
+            <div class="project-tab" onclick="filterProjects('arquitectura', this)" data-lang="tab_arquitectura">Arquitectura</div>
+            <div class="project-tab" onclick="filterProjects('fiscalizacao', this)" data-lang="tab_fiscalizacao">Fiscalização</div>
+            <div class="project-tab" onclick="filterProjects('gestao', this)" data-lang="tab_gestao">Gestão</div>
+        </div>
+
+        <!-- Projects: Especialidades -->
+        <div class="project-category active" id="especialidades">
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">📐</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">🔧</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">⚡</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+        </div>
+
+        <!-- Projects: Arquitectura -->
+        <div class="project-category" id="arquitectura">
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">🏠</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">🏢</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+        </div>
+
+        <!-- Projects: Fiscalização -->
+        <div class="project-category" id="fiscalizacao">
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">📋</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+        </div>
+
+        <!-- Projects: Gestão -->
+        <div class="project-category" id="gestao">
+            <div class="project-card fade-in">
+                <div class="project-placeholder"><div class="project-placeholder-icon">🏗️</div><span data-lang="project_placeholder">O seu projeto aqui</span></div>
+                <div class="project-overlay"><h3>Nome do Projeto</h3><p data-lang="project_location">Localização • Ano</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="sobre">
+        <div class="about-content">
+            <div class="about-text fade-in">
+                <span class="section-label" data-lang="about_label">Sobre Nós</span>
+                <h2 data-lang="about_title">Engenharia com visão, arquitectura com alma</h2>
+                <p data-lang="about_text1">A ARAIA nasce da paixão por criar espaços que transcendem a funcionalidade básica. Combinamos rigor técnico com sensibilidade arquitectónica para desenvolver projetos únicos.</p>
+                <p data-lang="about_text2">Trabalhamos em Portugal com foco na sustentabilidade, inovação e qualidade. Cada projeto é uma oportunidade de superar expectativas e criar valor duradouro.</p>
+                <a href="#contacto" class="btn btn-primary" style="margin-top: 1rem; background: var(--primary); color: var(--white);" data-lang="about_btn">Comece o Seu Projeto</a>
+            </div>
+            <div class="about-image fade-in">
+                <div class="about-image-placeholder"><span data-lang="about_image_placeholder">A sua foto ou imagem da equipa aqui</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contacto">
+        <div class="contact-content fade-in">
+            <span class="section-label" data-lang="contact_label">Contacto</span>
+            <h2 data-lang="contact_title">Vamos construir algo extraordinário juntos</h2>
+            <p data-lang="contact_text">Tem um projeto em mente? Estamos aqui para o ajudar a concretizá-lo.</p>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3 data-lang="contact_email_title">Email</h3>
+                    <p><a href="mailto:geral@araia.pt">geral@araia.pt</a></p>
+                </div>
+                <div class="contact-item">
+                    <h3 data-lang="contact_phone_title">Telefone</h3>
+                    <p><a href="tel:+351000000000">+351 000 000 000</a></p>
+                </div>
+                <div class="contact-item">
+                    <h3 data-lang="contact_address_title">Morada</h3>
+                    <p>Portugal<br>(A definir)</p>
+                </div>
+                <div class="contact-item">
+                    <h3 data-lang="contact_hours_title">Horário</h3>
+                    <p data-lang="contact_hours">Seg - Sex: 9h00 - 18h00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 ARAIA - Engenharia, Arquitectura e Construção. <span data-lang="footer_rights">Todos os direitos reservados.</span></p>
+    </footer>
+
+    <script>
+        // ==================== LANGUAGE SYSTEM (CORREGIDO) ====================
+        const translations = {
+            pt: {
+                nav_home: "Início", nav_services: "Serviços", nav_projects: "Projetos", nav_about: "Sobre", nav_contact: "Contacto",
+                hero_label: "Engenharia • Arquitectura • Construção",
+                hero_title: "Soluções integradas para o seu projeto",
+                hero_text: "Desenvolvemos projetos de especialidades, projetos de arquitectura, fiscalização de obra e gestão de construção. Do conceito à entrega, com rigor e excelência.",
+                hero_btn1: "Ver Projetos", hero_btn2: "Fale Connosco",
+                stat_1: "Projetos Concluídos", stat_2: "Clientes Satisfeitos", stat_3: "Compromisso Qualidade", stat_4: "Parceiros Especializados",
+                services_label: "O Que Fazemos", services_title: "Soluções completas para a sua obra",
+                service_1_title: "Projetos de Especialidades", service_1_text: "Estruturas, águas, saneamento, eletricidade, telecomunicações e segurança contra incêndios.",
+                service_2_title: "Projetos de Arquitectura", service_2_text: "Estudos prévios, anteprojetos e projetos de execução com design contemporâneo e funcional.",
+                service_3_title: "Fiscalização de Obra", service_3_text: "Acompanhamento técnico rigoroso, controlo de qualidade, prazos e conformidade normativa.",
+                service_4_title: "Gestão de Construção", service_4_text: "Coordenação geral da obra, gestão de equipas, orçamento e planeamento de execução.",
+                service_5_title: "Peritagens Técnicas", service_5_text: "Avaliações técnicas, peritagens de garantia e engenharia forense com relatórios fundamentados.",
+                service_6_title: "Sustentabilidade", service_6_text: "Eficiência energética, materiais eco-friendly e certificação energética de edifícios.",
+                projects_label: "Portfólio", projects_title: "Os Nossos Projetos", projects_text: "Explore os nossos trabalhos divididos por área de especialização.",
+                tab_especialidades: "Especialidades", tab_arquitectura: "Arquitectura", tab_fiscalizacao: "Fiscalização", tab_gestao: "Gestão",
+                project_placeholder: "O seu projeto aqui", project_location: "Localização • Ano",
+                about_label: "Sobre Nós", about_title: "Engenharia com visão, arquitectura com alma",
+                about_text1: "A ARAIA nasce da paixão por criar espaços que transcendem a funcionalidade básica. Combinamos rigor técnico com sensibilidade arquitectónica para desenvolver projetos únicos.",
+                about_text2: "Trabalhamos em Portugal com foco na sustentabilidade, inovação e qualidade. Cada projeto é uma oportunidade de superar expectativas e criar valor duradouro.",
+                about_btn: "Comece o Seu Projeto", about_image_placeholder: "A sua foto ou imagem da equipa aqui",
+                contact_label: "Contacto", contact_title: "Vamos construir algo extraordinário juntos", contact_text: "Tem um projeto em mente? Estamos aqui para o ajudar a concretizá-lo.",
+                contact_email_title: "Email", contact_phone_title: "Telefone", contact_address_title: "Morada", contact_hours_title: "Horário", contact_hours: "Seg - Sex: 9h00 - 18h00",
+                footer_rights: "Todos os direitos reservados."
+            },
+            es: {
+                nav_home: "Inicio", nav_services: "Servicios", nav_projects: "Proyectos", nav_about: "Sobre", nav_contact: "Contacto",
+                hero_label: "Ingeniería • Arquitectura • Construcción",
+                hero_title: "Soluciones integradas para su proyecto",
+                hero_text: "Desarrollamos proyectos de especialidades, proyectos de arquitectura, fiscalización de obra y gestión de construcción. Del concepto a la entrega, con rigor y excelencia.",
+                hero_btn1: "Ver Proyectos", hero_btn2: "Hable con Nosotros",
+                stat_1: "Proyectos Completados", stat_2: "Clientes Satisfechos", stat_3: "Compromiso Calidad", stat_4: "Socios Especializados",
+                services_label: "Qué Hacemos", services_title: "Soluciones completas para su obra",
+                service_1_title: "Proyectos de Especialidades", service_1_text: "Estructuras, aguas, saneamiento, electricidad, telecomunicaciones y seguridad contra incendios.",
+                service_2_title: "Proyectos de Arquitectura", service_2_text: "Estudios previos, anteproyectos y proyectos de ejecución con diseño contemporáneo y funcional.",
+                service_3_title: "Fiscalización de Obra", service_3_text: "Acompañamiento técnico riguroso, control de calidad, plazos y conformidad normativa.",
+                service_4_title: "Gestión de Construcción", service_4_text: "Coordinación general de la obra, gestión de equipos, presupuesto y planificación de ejecución.",
+                service_5_title: "Peritajes Técnicos", service_5_text: "Evaluaciones técnicas, peritajes de garantía e ingeniería forense con informes fundamentados.",
+                service_6_title: "Sostenibilidad", service_6_text: "Eficiencia energética, materiales eco-friendly y certificación energética de edificios.",
+                projects_label: "Portafolio", projects_title: "Nuestros Proyectos", projects_text: "Explore nuestros trabajos divididos por área de especialización.",
+                tab_especialidades: "Especialidades", tab_arquitectura: "Arquitectura", tab_fiscalizacao: "Fiscalización", tab_gestao: "Gestión",
+                project_placeholder: "Su proyecto aquí", project_location: "Ubicación • Año",
+                about_label: "Sobre Nosotros", about_title: "Ingeniería con visión, arquitectura con alma",
+                about_text1: "ARAIA nace de la pasión por crear espacios que trascienden la funcionalidad básica. Combinamos rigor técnico con sensibilidad arquitectónica para desarrollar proyectos únicos.",
+                about_text2: "Trabajamos en Portugal con foco en la sostenibilidad, innovación y calidad. Cada proyecto es una oportunidad de superar expectativas y crear valor duradero.",
+                about_btn: "Comience Su Proyecto", about_image_placeholder: "Su foto o imagen del equipo aquí",
+                contact_label: "Contacto", contact_title: "Vamos a construir algo extraordinario juntos", contact_text: "¿Tiene un proyecto en mente? Estamos aquí para ayudarle a concretarlo.",
+                contact_email_title: "Email", contact_phone_title: "Teléfono", contact_address_title: "Dirección", contact_hours_title: "Horario", contact_hours: "Lun - Vie: 9h00 - 18h00",
+                footer_rights: "Todos los derechos reservados."
+            },
+            en: {
+                nav_home: "Home", nav_services: "Services", nav_projects: "Projects", nav_about: "About", nav_contact: "Contact",
+                hero_label: "Engineering • Architecture • Construction",
+                hero_title: "Integrated solutions for your project",
+                hero_text: "We develop specialty projects, architecture projects, construction supervision and construction management. From concept to delivery, with precision and excellence.",
+                hero_btn1: "View Projects", hero_btn2: "Contact Us",
+                stat_1: "Completed Projects", stat_2: "Satisfied Clients", stat_3: "Quality Commitment", stat_4: "Specialized Partners",
+                services_label: "What We Do", services_title: "Complete solutions for your construction",
+                service_1_title: "Specialty Projects", service_1_text: "Structures, water, sanitation, electricity, telecommunications and fire safety.",
+                service_2_title: "Architecture Projects", service_2_text: "Preliminary studies, draft projects and execution projects with contemporary and functional design.",
+                service_3_title: "Construction Supervision", service_3_text: "Rigorous technical monitoring, quality control, deadlines and regulatory compliance.",
+                service_4_title: "Construction Management", service_4_text: "General coordination of the work, team management, budget and execution planning.",
+                service_5_title: "Technical Expertise", service_5_text: "Technical evaluations, warranty expertises and forensic engineering with substantiated reports.",
+                service_6_title: "Sustainability", service_6_text: "Energy efficiency, eco-friendly materials and energy certification of buildings.",
+                projects_label: "Portfolio", projects_title: "Our Projects", projects_text: "Explore our work divided by area of specialization.",
+                tab_especialidades: "Specialties", tab_arquitectura: "Architecture", tab_fiscalizacao: "Supervision", tab_gestao: "Management",
+                project_placeholder: "Your project here", project_location: "Location • Year",
+                about_label: "About Us", about_title: "Engineering with vision, architecture with soul",
+                about_text1: "ARAIA is born from the passion to create spaces that transcend basic functionality. We combine technical rigor with architectural sensitivity to develop unique projects.",
+                about_text2: "We work in Portugal with a focus on sustainability, innovation and quality. Each project is an opportunity to exceed expectations and create lasting value.",
+                about_btn: "Start Your Project", about_image_placeholder: "Your photo or team image here",
+                contact_label: "Contact", contact_title: "Let's build something extraordinary together", contact_text: "Have a project in mind? We're here to help you make it happen.",
+                contact_email_title: "Email", contact_phone_title: "Phone", contact_address_title: "Address", contact_hours_title: "Hours", contact_hours: "Mon - Fri: 9:00 AM - 6:00 PM",
+                footer_rights: "All rights reserved."
+            }
+        };
+
+        // FUNCIÓN CORREGIDA: Ahora recibe el elemento 'btn' directamente
+        function changeLanguage(lang, btn) {
+            // Update button styles
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                const key = element.getAttribute('data-lang');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang === 'pt' ? 'pt-PT' : lang;
+        }
+
+        // ==================== HERO SLIDER ====================
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = slides.length;
+
+        function goToSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        setInterval(nextSlide, 5000);
+
+        // ==================== PROJECT FILTERS (CORREGIDO) ====================
+        function filterProjects(category, tabElement) {
+            document.querySelectorAll('.project-category').forEach(cat => cat.classList.remove('active'));
+            document.querySelectorAll('.project-tab').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(category).classList.add('active');
+            tabElement.classList.add('active');
+        }
+
+        // ==================== NAVBAR SCROLL ====================
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // ==================== FADE IN ====================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ==================== SMOOTH SCROLL ====================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
